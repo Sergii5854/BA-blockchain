@@ -1,4 +1,4 @@
-<script>
+
     import sha256 from "sha256"
 
     export default class Block {
@@ -18,6 +18,4 @@
 
     }
 
-    console.log( new Block(0, '15/11/2018','this important data', 'this is first '))
 
-</script>
