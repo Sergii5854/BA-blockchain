@@ -2,7 +2,7 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <pre>
-{{testChain}}
+<!--{{testChain}}-->
     </pre>
 
     <HelloWorld msg="Welcome to Your Vue.js App"/>
@@ -25,10 +25,10 @@ export default {
           return new Block(0, '15/11/2018', 'this important data', 'this is first ')
         },
         testChain: function(){
-            let blockChain = new Chain()
-            blockChain.addBlock(new Block(1, '15/11/2018', 'this important data 1', 'this is second '))
-            blockChain.addBlock(new Block(2, '15/11/2018', 'this important data 2', 'this is 3 '))
-            return blockChain
+//            let blockChain = new Chain()
+//            blockChain.addBlock(new Block(1, '15/11/2018', 'this important data 1', 'this is second '))
+//            blockChain.addBlock(new Block(2, '15/11/2018', 'this important data 2', 'this is 3 '))
+//            return blockChain
         }
 
     }
