@@ -2,10 +2,10 @@
     <div id="app">
         <img alt="Vue logo" src="./assets/logo.png">
         <pre>
-        {{blokCreate}}
-        {{testChain}}
-<!--<button v-on:click="testChain">testChain</button>-->
-    </pre>
+        {{blockChain}}
+
+         </pre>
+        <button @click="addTransition">Add Transition</button>
 
         <HelloWorld msg="Welcome to Your Vue.js App"/>
     </div>
@@ -16,25 +16,33 @@
     import Block from './components/Block'
     import Chain from './components/Chain'
     import Transaction from './components/Transaction'
+    import {randomIntFromInterval, randomNumericString } from './utils/random'
 
     export default {
         name: 'app',
+        data() {
+            return {
+                blockChain: new Chain(),
+                index: 0
+            }
+        },
         components: {
             HelloWorld
         },
-
-
-        computed: {
-            blokCreate: function () {
-                return new Block(0, '15/11/2018', 'this important data', 'this is first ')
+        methods: {
+            addTransition() {
+                let from  = randomNumericString()
+                let to  = randomNumericString()
+                let amount  = randomIntFromInterval(0,100)
+                let date = new Date()
+                let transaction = new Transaction(from, to, amount)
+                let block = new Block(++this.index, date, transaction )
+                this.addBlock2Chain(block)
             },
-            testChain: function () {
-                let blockChain = new Chain()
-                blockChain.addBlock(new Block(1, '15/11/2018', 'this important data 1', 'this is second '))
-                blockChain.addBlock(new Block(2, '15/11/2018', 'this important data 2', 'this is 3 '))
-//                return JSON.stringify(blockChain, null, 2)
-                return blockChain
+            addBlock2Chain(block){
+                this.blockChain.addBlock(block)
             }
+
 
         }
     }
