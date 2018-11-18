@@ -21,7 +21,9 @@ export default class Chain {
         this.chain.push(newBlock)
     }
 
+    isValid(){
 
+    }
 
 
 }
