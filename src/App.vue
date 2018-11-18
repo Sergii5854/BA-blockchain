@@ -13,9 +13,9 @@
 
 <script>
     import HelloWorld from './components/HelloWorld.vue'
-    import Block from './components/Block'
-    import Chain from './components/Chain'
-    import Transaction from './components/Transaction'
+    import Block from './models/Block'
+    import Chain from './models/Chain'
+    import Transaction from './models/Transaction'
     import {randomIntFromInterval, randomNumericString } from './utils/random'
 
     export default {
