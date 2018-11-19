@@ -1,10 +1,11 @@
 import sha256 from "sha256"
 
+
 export default class Block {
 
-    constructor( timestamp, transaction, previousHash = '') {
+    constructor( timestamp, transactions, previousHash = '') {
         this.timestamp = timestamp;
-        this.transaction = transaction;
+        this.transactions = transactions;
         this.previousHash = previousHash;
         this.hash = this.calculateHash();
         this.nonce = 0;
@@ -22,6 +23,18 @@ export default class Block {
         console.log(`block mined  ${this.hash} `);
 
     }
+
+    hasValidTransaction(){
+        for( let transaction of this.transactions ){
+            if(!transaction.isValid()){
+                return false
+            }
+        }
+        return false
+    }
+
+
+
 
 
 }
