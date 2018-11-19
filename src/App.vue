@@ -2,7 +2,8 @@
     <div id="app">
         <img alt="Vue logo" src="./assets/logo.png">
         <div>
-            <button @click="addTransition">Add Transition</button>
+            <button @click="addTransition"
+            class="btn btn-md btn-success">Add Transition</button>
         </div>
 
         <pre>
@@ -15,12 +16,17 @@
 </template>
 
 <script>
+    import Vue from 'vue'
+    import BootstrapVue from 'bootstrap-vue'
+
     import HelloWorld from './components/HelloWorld.vue'
     import Block from './models/Block'
     import Chain from './models/Chain'
     import Transaction from './models/Transaction'
     import KeyGenerator from './utils/keyGenerator'
     import {randomIntFromInterval, randomNumericString } from './utils/random'
+
+    Vue.use(BootstrapVue);
 
     export default {
         name: 'app',
