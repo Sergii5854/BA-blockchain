@@ -17,9 +17,10 @@ export default class Transaction {
         if (signKey.getPublic('hex') !== this.from) {
             throw new Error('You cannot sign Transaction for other wallets')
         }
+
         let hashTransaction = this.calculateHash()
-        let sng = signKey.sing(hashTransaction, 'base64')
-        this.signature = sng.toDER('hex')
+        let sig = signKey.sign(hashTransaction, 'base64')
+        this.signature = sig.toDER('hex')
 
     }
 
