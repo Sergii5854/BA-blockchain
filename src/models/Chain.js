@@ -19,12 +19,12 @@ export default class Chain {
         return this.chain[this.chain.length-1]
     }
 
-    addBlock(newBlock){
-        newBlock.previousHash = this.getLastBlock().hash
-        // newBlock.hash = newBlock.calculateHash()
-        newBlock.mineBlock(this.difficulty)
-        this.chain.push(newBlock)
-    }
+    // addBlock(newBlock){
+    //     newBlock.previousHash = this.getLastBlock().hash
+    //     // newBlock.hash = newBlock.calculateHash()
+    //     newBlock.mineBlock(this.difficulty)
+    //     this.chain.push(newBlock)
+    // }
 
     mineTransaction(mineRewardAddress) {
 
@@ -42,6 +42,26 @@ export default class Chain {
     createTransaction(transaction){
         this.pendingTransactions.push(transaction )
     }
+
+    getBalanceOfAddress(addres){
+        let balance = 0
+
+        for(let block of this.chain){
+            for( let transaction of block.transactions){
+
+                if(transaction.from === addres){
+                    balance -= transaction.amount
+                }
+
+                if(transaction.to === addres){
+                    balance += transaction.amount
+                }
+            }
+        }
+
+        return balance
+    }
+
 
 
     isValid(){
