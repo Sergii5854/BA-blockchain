@@ -1,11 +1,15 @@
 <template>
     <div id="app">
         <img alt="Vue logo" src="./assets/logo.png">
+        <div>
+            <button @click="addTransition">Add Transition</button>
+        </div>
+
         <pre>
         {{blockChain}}
 
          </pre>
-        <button @click="addTransition">Add Transition</button>
+
 
     </div>
 </template>
@@ -15,6 +19,7 @@
     import Block from './models/Block'
     import Chain from './models/Chain'
     import Transaction from './models/Transaction'
+    import KeyGenerator from './utils/keyGenerator'
     import {randomIntFromInterval, randomNumericString } from './utils/random'
 
     export default {

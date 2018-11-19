@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "elliptic": "^6.4.1",
     "sha256": "^0.2.0",
     "vue": "^2.5.17"
   },

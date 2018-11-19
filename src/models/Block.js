@@ -2,17 +2,16 @@ import sha256 from "sha256"
 
 export default class Block {
 
-    constructor(index, timestamp, data, previousHash = '') {
-        this.index = index;
+    constructor( timestamp, transaction, previousHash = '') {
         this.timestamp = timestamp;
-        this.data = data || {};
+        this.transaction = transaction;
         this.previousHash = previousHash;
         this.hash = this.calculateHash();
         this.nonce = 0;
     }
 
     calculateHash() {
-        return sha256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data) + this.nonce)
+        return sha256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.transaction) + this.nonce)
     }
 
     mineBlock(difficulty) {

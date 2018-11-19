@@ -4,12 +4,14 @@ export default class Chain {
 
     constructor() {
         this.chain = [this.createGenesisBlock()];
-        this.difficulty = 2
+        this.difficulty = 3;
+        this.pendingTransactions = [];
+        this.miningReward = 1;
 
     }
 
     createGenesisBlock(){
-        return new Block(0, '15/11/2018', 'this important data', 'this is first ')
+        return new Block( '15/11/2018', 'this important data', 'this is first ')
     }
 
     getLastBlock(){
