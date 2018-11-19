@@ -5,7 +5,7 @@ export default class Chain {
 
     constructor() {
         this.chain = [this.createGenesisBlock()];
-        this.difficulty = 4;
+        this.difficulty = 2;
         this.pendingTransactions = [];
         this.miningReward = 1;
 

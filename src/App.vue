@@ -3,26 +3,27 @@
         <img alt="Vue logo" src="./assets/logo.png">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
-                    <label>Without signature</label>
+                <div class="col-md-6">
+                    <h2>Without signature</h2>
                     <b-button @click="addTransition"
-                            class="btn btn-md btn-success">Add Transition
+                              class="btn btn-md btn-success">Add Transition
                     </b-button>
 
 
                 </div>
 
                 <div class="col-sm-6">
-                    <label>With signature</label>
+                    <h2>With signature</h2>
                     <button @click="addTx"
                             class="btn btn-md btn-success">Add Transition
                     </button>
                 </div>
+                <div class="text-center">
+                    <pre class="row">
+                        {{blockChain}}
 
-                <pre>
-        {{blockChain}}
-
-         </pre>
+                    </pre>
+                </div>
             </div>
         </div>
     </div>
@@ -31,6 +32,8 @@
 <script>
     import Vue from 'vue'
     import BootstrapVue from 'bootstrap-vue'
+    import 'bootstrap/dist/css/bootstrap.css'
+    import 'bootstrap-vue/dist/bootstrap-vue.css'
 
     import EC from 'elliptic/lib/elliptic/ec';
 
@@ -57,13 +60,13 @@
             HelloWorld
         },
         methods: {
-            getMyKey(){
+            getMyKey() {
                 const ec = new EC('secp256k1');
                 console.log(ec.keyFromPrivate('47c38c05301db390963a0807f1ae35db3248147a0abffa20f0a12ab8cdd46e15'));
                 return ec.keyFromPrivate('47c38c05301db390963a0807f1ae35db3248147a0abffa20f0a12ab8cdd46e15')
 
             },
-            getMyWalletAddress(){
+            getMyWalletAddress() {
 
                 return this.getMyKey().getPublic('hex')
             },
