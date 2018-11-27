@@ -1,6 +1,7 @@
 <template>
     <div id="app">
-        <img alt="Vue logo" src="./assets/logo.png">
+
+        <Hero />
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
@@ -34,10 +35,11 @@
     import BootstrapVue from 'bootstrap-vue'
     import 'bootstrap/dist/css/bootstrap.css'
     import 'bootstrap-vue/dist/bootstrap-vue.css'
+    import VueRouter from 'vue-router'
 
     import EC from 'elliptic/lib/elliptic/ec';
 
-    import HelloWorld from './components/HelloWorld.vue'
+    import Hero from './components/hero.vue'
     import Block from './models/Block'
     import Chain from './models/Chain'
     import Transaction from './models/Transaction'
@@ -45,9 +47,34 @@
     import {randomIntFromInterval, randomNumericString} from './utils/random'
 
     Vue.use(BootstrapVue);
+    Vue.use(VueRouter);
+    const routes = [
+        {
+            path:'/users',
+            component: Users
+        },
+        {
+            path:'/hw3',
+            component: HW3
+        },
+        {
+            path:'/hw2',
+            component: HW2
+        },
+        {
+            path:'/',
+            component: Home
+        },
+
+    ];
+
+    const router = new VueRouter({
+        routes
+    })
 
     export default {
         name: 'app',
+        router,
         data() {
             return {
                 blockChain: new Chain(),
@@ -57,7 +84,7 @@
             }
         },
         components: {
-            HelloWorld
+            Hero
         },
         methods: {
             getMyKey() {
@@ -105,6 +132,5 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
-        margin-top: 60px;
     }
 </style>
