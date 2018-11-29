@@ -14,7 +14,7 @@ export default class Chain {
     }
 
     createGenesisBlock() {
-        return new Block('15/11/2018', 'this important data GenesisBlock', '0')
+        return new Block('15/11/2018', [{"from":'GenesisBlock' }], '0')
     }
 
     getLastBlock() {

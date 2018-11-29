@@ -4,6 +4,7 @@
 
         <div class="container">
             <div class="row">
+                <br>
                 <div class="col-md-6">
                     <h2>Without signature</h2>
                     <b-button @click="addTransition"
@@ -13,17 +14,69 @@
 
                 </div>
 
+
                 <div class="col-sm-6">
                     <h2>With signature</h2>
                     <button @click="addTx"
                             class="btn btn-md btn-success">Add Transition
                     </button>
                 </div>
+                <br>
                 <div class="text-center">
-                    <pre class="row">
-                        {{blockChain}}
 
-                    </pre>
+<pre>
+    {{blockChain.chain[0].from }}
+
+</pre>
+
+                          <b-table stacked="md"
+                                   show-empty
+                                   v-if="blockChain.chain"
+                                   :items="blockChain.chain"
+
+                          >
+
+                              <template slot="transactions"
+                                        slot-scope="row">
+                                  <b-row class="mb-2">
+                                      <b-col sm="3" class="text-sm-right"><b> From:</b></b-col>
+                                      <b-col>{{row.value[0].from}}</b-col>
+                                  </b-row>
+                                  <b-row class="mb-2">
+                                      <b-col sm="3" class="text-sm-right"><b> To:</b></b-col>
+                                      <b-col>{{row.value[0].to}}</b-col>
+                                  </b-row>
+                                  <b-row class="mb-2">
+                                      <b-col sm="3" class="text-sm-right"><b> Amount:</b></b-col>
+                                      <b-col>{{row.value[0].amount}}</b-col>
+                                  </b-row>
+
+
+                              </template>
+                              <template slot="show_details" slot-scope="row">
+                                <b-button size="sm" @click.stop="row.toggleDetails" class="mr-2">
+       {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
+                                </b-button>
+                              </template>
+
+
+
+                              <template slot="row-details" slot-scope="row">
+                                  <b-card>
+                                      <b-table class="col-md-12" striped hover
+                                               v-if="row.transactions"
+                                               :items="row.transactions"
+                                      >
+                                      </b-table>
+                                      <b-button size="sm" @click="row.toggleDetails">Hide Details</b-button>
+                                  </b-card>
+                              </template>
+                          </b-table>
+
+
+
+
+
                 </div>
             </div>
         </div>

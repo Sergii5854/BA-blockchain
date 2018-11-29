@@ -10,7 +10,9 @@
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.11",
     "elliptic": "^6.4.1",
+    "peerjs": "^0.3.18",
     "sha256": "^0.2.0",
+    "skylinkjs": "^0.6.35",
     "vue": "^2.5.17",
     "vue-router": "^3.0.2"
   },
