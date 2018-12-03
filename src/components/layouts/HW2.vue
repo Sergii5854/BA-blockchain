@@ -24,16 +24,10 @@
                 <br>
                 <div class="text-center">
 
-<pre>
-    {{blockChain.chain[0].from }}
-
-</pre>
-
                           <b-table stacked="md"
                                    show-empty
                                    v-if="blockChain.chain"
                                    :items="blockChain.chain"
-
                           >
 
                               <template slot="transactions"
