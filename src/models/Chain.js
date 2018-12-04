@@ -1,8 +1,6 @@
 import Block from "./Block"
 import Transaction from "./Transaction";
 
-import chainStore from "./../store/chainStore";
-
 export default class Chain {
 
     constructor() {
