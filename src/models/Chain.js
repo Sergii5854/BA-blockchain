@@ -1,6 +1,8 @@
 import Block from "./Block"
 import Transaction from "./Transaction";
 
+const minePeriod =  1000
+
 export default class Chain {
 
     constructor() {
@@ -34,7 +36,7 @@ export default class Chain {
         let block = new Block(Date.now(), this.pendingTransactions, this.getLastBlock().hash)
         block.mineBlock(this.difficulty)
 
-        console.log("block successfully mined");
+        console.log("block successfully mined"); // eslint-disable-line no-console
         this.chain.push(block)
 
         this.pendingTransactions = []
@@ -53,17 +55,17 @@ export default class Chain {
         this.pendingTransactions.push(transaction)
     }
 
-    getBalanceOfAddress(addres) {
+    getBalanceOfAddress(address) {
         let balance = 0
 
         for (let block of this.chain) {
             for (let transaction of block.transactions) {
 
-                if (transaction.from === addres) {
+                if (transaction.from === address) {
                     balance -= transaction.amount
                 }
 
-                if (transaction.to === addres) {
+                if (transaction.to === address) {
                     balance += transaction.amount
                 }
             }
@@ -93,6 +95,30 @@ export default class Chain {
 
         }
         return true
+    }
+
+    async mineBlock(transactions) {
+        const begin = performance.now();
+
+        let block = new Block();
+        transactions.forEach(function(transaction) {
+            block.addTransaction(transaction);
+        });
+        let getLastBlock = this.getLastBlock();
+        block.previousHash = getLastBlock.hash;
+        return block.mineBlock(this.difficulty).then(() => {
+            const end = performance.now();
+            const diff = end - begin;
+
+            console.log({ time: diff, difficulty: this.difficulty }); // eslint-disable-line no-console
+            if (diff < minePeriod) {
+                this.difficulty += 1;
+            } else {
+                this.difficulty -= 1;
+            }
+            this.chain.push(block)
+            return this.chain;
+        })
     }
 
 

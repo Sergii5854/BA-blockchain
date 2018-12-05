@@ -17,7 +17,7 @@
                         <router-link class="nav-link" to="/hw2">HW 2</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" to="/hw3">HW 3</router-link>
+                        <router-link class="nav-link" to="/hw3#mainTURN">HW 3</router-link>
                     </li>
                 </b-navbar-nav>
 

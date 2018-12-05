@@ -12,7 +12,7 @@ export default class Block {
     }
 
     calculateHash() {
-        return sha256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.transaction) + this.nonce)
+        return sha256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.transactions) + this.nonce)
     }
 
     mineBlock(difficulty) {
@@ -20,7 +20,7 @@ export default class Block {
             this.nonce++;
             this.hash = this.calculateHash()
         }
-        console.log(`block mined  ${this.hash} `);
+        console.log(`block mined  ${this.hash} `); // eslint-disable-line no-console
 
     }
 
