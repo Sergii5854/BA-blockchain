@@ -5,70 +5,66 @@
         <div class="container">
             <div class="row">
                 <br>
-                <div class="col-md-6">
-                    <h2>Without signature</h2>
-                    <b-button @click="addTransition"
-                              class="btn btn-md btn-success">Add Transition
-                    </b-button>
+                <!--<div class="col-md-6">-->
+                    <!--<h2>Without signature</h2>-->
+                    <!--<b-button @click="addTransition"-->
+                              <!--class="btn btn-md btn-success">Add Transition-->
+                    <!--</b-button>-->
 
 
-                </div>
+                <!--</div>-->
 
 
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <h2>With signature</h2>
                     <button @click="addTx"
                             class="btn btn-md btn-success">Add Transition
                     </button>
                 </div>
                 <br>
-                <div class="text-center">
+                <div class="text-center"    v-if="blockChain.chain">
 
-                          <b-table stacked="md"
-                                   show-empty
-                                   v-if="blockChain.chain"
-                                   :items="blockChain.chain"
-                          >
+                    <b-table stacked="md"
+                             show-empty
+                             :items="blockChain.chain"
+                    >
 
-                              <template slot="transactions"
-                                        slot-scope="row">
-                                  <b-row class="mb-2">
-                                      <b-col sm="3" class="text-sm-right"><b> From:</b></b-col>
-                                      <b-col>{{row.value[0].from}}</b-col>
-                                  </b-row>
-                                  <b-row class="mb-2">
-                                      <b-col sm="3" class="text-sm-right"><b> To:</b></b-col>
-                                      <b-col>{{row.value[0].to}}</b-col>
-                                  </b-row>
-                                  <b-row class="mb-2">
-                                      <b-col sm="3" class="text-sm-right"><b> Amount:</b></b-col>
-                                      <b-col>{{row.value[0].amount}}</b-col>
-                                  </b-row>
-
-
-                              </template>
-                              <template slot="show_details" slot-scope="row">
-                                <b-button size="sm" @click.stop="row.toggleDetails" class="mr-2">
-       {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
-                                </b-button>
-                              </template>
+                        <template slot="transactions"
+                                  slot-scope="row">
+                            <b-row class="mb-2">
+                                <b-col sm="3" class="text-sm-right"><b> From:</b></b-col>
+                                <b-col  v-if="row.value[0].from">{{row.value[0].from}}</b-col>
+                                <b-col  v-else>0</b-col>
+                            </b-row>
+                            <b-row class="mb-2">
+                                <b-col sm="3" class="text-sm-right"><b> To:</b></b-col>
+                                <b-col>{{row.value[0].to}}</b-col>
+                            </b-row>
+                            <b-row class="mb-2">
+                                <b-col sm="3" class="text-sm-right"><b> Amount:</b></b-col>
+                                <b-col>{{row.value[0].amount}}</b-col>
+                            </b-row>
 
 
-
-                              <template slot="row-details" slot-scope="row">
-                                  <b-card>
-                                      <b-table class="col-md-12" striped hover
-                                               v-if="row.transactions"
-                                               :items="row.transactions"
-                                      >
-                                      </b-table>
-                                      <b-button size="sm" @click="row.toggleDetails">Hide Details</b-button>
-                                  </b-card>
-                              </template>
-                          </b-table>
+                        </template>
+                        <template slot="show_details" slot-scope="row">
+                            <b-button size="sm" @click.stop="row.toggleDetails" class="mr-2">
+                                {{ row.detailsShowing ? 'Hide' : 'Show'}} Details
+                            </b-button>
+                        </template>
 
 
-
+                        <template slot="row-details" slot-scope="row">
+                            <b-card>
+                                <b-table class="col-md-12" striped hover
+                                         v-if="row.transactions"
+                                         :items="row.transactions"
+                                >
+                                </b-table>
+                                <b-button size="sm" @click="row.toggleDetails">Hide Details</b-button>
+                            </b-card>
+                        </template>
+                    </b-table>
 
 
                 </div>
@@ -84,7 +80,7 @@
     import Block from './../../models/Block'
     import Chain from './../../models/Chain'
     import Transaction from './../../models/Transaction'
-//    import KeyGenerator from './../../utils/keyGenerator'
+    //    import KeyGenerator from './../../utils/keyGenerator'
     import {randomIntFromInterval, randomNumericString} from './../../utils/random'
 
 
@@ -129,8 +125,10 @@
                 let to = randomNumericString()
                 let amount = randomIntFromInterval(0, 100)
                 let transaction1 = new Transaction(this.myWalletAddress, to, amount)
-                transaction1.signTransaction(this.myKey)
-                this.blockChain.addTransaction(transaction1)
+                transaction1.sign(this.myKey)
+
+                this.blockChain.addChainTransaction(transaction1)
+
                 this.blockChain.mineTransaction(this.myWalletAddress)
 
             }

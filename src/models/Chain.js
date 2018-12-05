@@ -43,7 +43,7 @@ export default class Chain {
 
     }
 
-    addTransaction(transaction) {
+    addChainTransaction(transaction) {
         if(!transaction.from || !transaction.to){
             throw new Error('transaction must include from and to  Addresses')
         }

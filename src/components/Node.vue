@@ -45,39 +45,78 @@
 
         <div v-show="isConnect">
             <h2>WebRTC Transaction Section</h2>
-            <form
-                    ref="transactionForm"
-                    :model="transactionForm"
-            >
-                <input
-                        size="sm" type="text"
-                        v-model="transactionForm.from"
-                        placeholder="from">
-                <input
-                        size="sm" type="text"
-                        v-model="transactionForm.to"
-                        placeholder="to">
-                <input
-                        size="sm" type="text"
-                        v-model="transactionForm.amount"
-                        placeholder="amount">
 
-                <button :disabled="isMining" type="primary" @click.prevent="submitForm('transactionForm')">
-                    Submit
-                </button>
-                <button @click="resetForm('transactionForm')">
-                    Reset
-                </button>
-            </form>
 
+            <button @click="addTx"
+                    class="btn btn-md btn-success">Add Transition
+            </button>
+
+
+            <div class="text-left" >
+                <pre>
+                    {{chain }}
+                </pre>
+
+                <!--<b-table stacked="md"-->
+                         <!--show-empty-->
+                         <!--:items="chain"-->
+                <!--&gt;-->
+
+                    <!--<template slot="transactions"-->
+                              <!--slot-scope="row">-->
+                        <!--<b-row class="mb-2">-->
+                            <!--<b-col sm="3" class="text-sm-right"><b> From:</b></b-col>-->
+                            <!--<b-col v-if="row.value[0].from">{{row.value[0].from}}</b-col>-->
+                            <!--<b-col v-else>0</b-col>-->
+                        <!--</b-row>-->
+                        <!--<b-row class="mb-2">-->
+                            <!--<b-col sm="3" class="text-sm-right"><b> To:</b></b-col>-->
+                            <!--<b-col>{{row.value[0].to}}</b-col>-->
+                        <!--</b-row>-->
+                        <!--<b-row class="mb-2">-->
+                            <!--<b-col sm="3" class="text-sm-right"><b> Amount:</b></b-col>-->
+                            <!--<b-col>{{row.value[0].amount}}</b-col>-->
+                        <!--</b-row>-->
+
+
+                    <!--</template>-->
+                    <!--<template slot="show_details" slot-scope="row">-->
+                        <!--<b-button size="sm" @click.stop="row.toggleDetails" class="mr-2">-->
+                            <!--{{ row.detailsShowing ? 'Hide' : 'Show'}} Details-->
+                        <!--</b-button>-->
+                    <!--</template>-->
+
+
+                    <!--<template slot="row-details" slot-scope="row">-->
+                        <!--<b-card>-->
+                            <!--<b-table class="col-md-12" striped hover-->
+                                     <!--v-if="row.transactions"-->
+                                     <!--:items="row.transactions"-->
+                            <!--&gt;-->
+                            <!--</b-table>-->
+                            <!--<b-button size="sm" @click="row.toggleDetails">Hide Details</b-button>-->
+                        <!--</b-card>-->
+                    <!--</template>-->
+                <!--</b-table>-->
+
+
+            </div>
         </div>
+
     </div>
+
 </template>
 
 <script>
     import Node from './../models/Node'
     import Peer from 'simple-peer'
     import Transaction from './../models/Transaction'
+
+    import Block from './../models/Block'
+    import Chain from './../models/Chain'
+
+    import EC from 'elliptic/lib/elliptic/ec';
+    import {randomIntFromInterval, randomNumericString} from './../utils/random'
 
     export default {
         name: 'Node',
@@ -98,11 +137,8 @@
                 offer: {},
                 isAnswer: false,
                 answer: {},
-                transactionForm: {
-                    from: "",
-                    to: "",
-                    amount: 0
-                },
+                myKey: this.getMyKey(),
+                myWalletAddress: this.getMyWalletAddress(),
                 peerForm: {
                     inner: ''
                 }
@@ -111,6 +147,7 @@
         created() {
             this.node = new Node(this.chain)
             this.transactionForm = this.node.publicKey()
+
             this.initPeer()
 
         },
@@ -155,7 +192,7 @@
                 })
             },
             updateWorldState(block) {
-                console.log(block) // eslint-disable-line no-console
+                console.log('block', block) // eslint-disable-line no-console
                 let transactions = block.transactions
                 console.log(block.transactions) // eslint-disable-line no-console
                 for (let i = 0; i < transactions.length; i++) {
@@ -173,47 +210,46 @@
                     }
                 }
             },
-            submitForm(formName) {
+            getMyKey() {
+                const ec = new EC('secp256k1');
+
+                return ec.keyFromPrivate('043858f05681eb5ab8b5e01e3714a2f930b60338733824211a…cdf136a69e838cf980208a69f36ca2be8e8b7260edb6daff6')
+
+            },
+            getMyWalletAddress() {
+
+                return this.getMyKey().getPublic('hex')
+            },
+            addTx() {
                 this.isMining = true
-                this.$refs[formName].validate(valid => {
-                    if (valid) {
-                        let transaction = new Transaction(
-                            JSON.parse(JSON.stringify(this.transactionForm))
-                        );
-                        transaction.sign(this.node.wallet()).then(() => {
-                            this.peer.send(JSON.stringify(transaction))
-                            this.node.chain.mineBlock([transaction]).then(blocks => {
-                                console.log('blocks', blocks) // eslint-disable-line no-console
-                                this.isMining = false
-                                this.updateWorldState(blocks[blocks.length - 1])
-                            })
-                        }).catch(error => {
-                            console.log('submit', error) // eslint-disable-line no-console
-                            this.isMining = false
-                            this.$message.error(error)
-                        });
-                    } else {
-                        console.log("error submit!!"); // eslint-disable-line no-console
-                        return false;
-                    }
-                })
+
+                let to = randomNumericString()
+                let amount = randomIntFromInterval(0, 100)
+
+                let transaction = new Transaction(this.myWalletAddress, to, amount)
+//                let transaction = new Transaction( JSON.parse(JSON.stringify(this.transactionForm) ))
+
+
+                transaction.sign(this.myKey).then(() => {
+
+                    this.peer.send(JSON.stringify(transaction))
+
+                    this.node.chain.mineBlock([transaction]).then(blocks => {
+                        console.log('blocks', blocks) // eslint-disable-line no-console
+                        this.isMining = false
+                        this.updateWorldState(blocks[blocks.length - 1])
+                    })
+                }).catch(error => {
+                    console.log('submit', error) // eslint-disable-line no-console
+                    this.isMining = false
+//                    this.$message.error(error)
+                });
             },
             submitPeerForm(formName) {
                 this.peer.signal(JSON.parse(this.peerForm.inner))
                 console.log("error submit!!"); // eslint-disable-line no-console
-                this.$refs[formName].validate(valid => {
-                    if (valid) {
-                        this.peer.signal(JSON.parse(this.peerForm.inner))
-                        console.log("error submit!!"); // eslint-disable-line no-console
-                    } else {
-                        console.log("error submit!!"); // eslint-disable-line no-console
-                        return false;
-                    }
-                })
-            },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            },
+
+            }
 
         }
 
