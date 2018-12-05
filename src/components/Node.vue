@@ -7,7 +7,7 @@
             </div>
             <div class="connect--false " v-else>
                 <h2>WebRTC Connect Section</h2>
-                <h3><a href="/hw3" target="_blank">Click here </a>
+                <h3><a href="https://ba-blockchain.netlify.com/hw3" target="_blank">Click here </a>
                     To open new tab in browser and create WebRTC connection  </h3>
                 <hr>
                 <div class="connect-indicator connect-indicator-false">
