@@ -1,60 +1,76 @@
 <template>
     <div>
+        <br>
         <div class="connect">
-            <div class="connect--true" v-if="isConnect">
+            <div class="connect--true connect-indicator connect-indicator-true" v-if="isConnect">
                 Connect
             </div>
-            <div class="connect--false" v-else>
-                NOT Connect
+            <div class="connect--false " v-else>
+                <h2>WebRTC Connect Section</h2>
+                <h3><a href="/hw3" target="_blank">Click here </a>
+                    To open new tab in browser and create WebRTC connection  </h3>
+                <hr>
+                <div class="connect-indicator connect-indicator-false">
+                    NOT Connect
+                </div>
+                <div class="offer" v-if="isOffer">
+                    <h3>Please, copy this OFFER and past in opening tab</h3>
+                    <textarea name="offer" rows="4">{{offer}}</textarea>
+                </div>
+                <div class="answer" v-if="isAnswer">
+                    <h3>Please, copy this ANSWER and past in previous tab</h3>
+                    <textarea name="answer" rows="4">{{answer}}</textarea>
+                </div>
+                <form
+                        ref="peerForm"
+                        :model="peerForm">
+                    <h3 v-if="isOffer">Please, Insert here answer </h3>
+                    <h3 v-else>Please, Insert here offer </h3>
+                    <textarea
+                            size="sm" type="text"
+                            v-model="peerForm.inner"
+                    />
+
+
+                    <button :disabled="isMining" type="primary" @click.prevent="submitPeerForm('peerForm')">
+                        Submit
+                    </button>
+                    <button @click.prevent="resetForm('peerForm')">
+                        Reset
+                    </button>
+                </form>
             </div>
         </div>
 
-        <form
-                ref="peerForm"
 
-                :model="peerForm">
+        <div v-show="isConnect">
+            <h2>WebRTC Transaction Section</h2>
+            <form
+                    ref="transactionForm"
+                    :model="transactionForm"
+            >
+                <input
+                        size="sm" type="text"
+                        v-model="transactionForm.from"
+                        placeholder="from">
+                <input
+                        size="sm" type="text"
+                        v-model="transactionForm.to"
+                        placeholder="to">
+                <input
+                        size="sm" type="text"
+                        v-model="transactionForm.amount"
+                        placeholder="amount">
 
-            <textarea
-                    size="sm" type="text"
-                    v-model="peerForm.inner"
-            />
+                <button :disabled="isMining" type="primary" @click.prevent="submitForm('transactionForm')">
+                    Submit
+                </button>
+                <button @click="resetForm('transactionForm')">
+                    Reset
+                </button>
+            </form>
 
-
-            <button :disabled="isMining" type="primary" @click.prevent="submitPeerForm('peerForm')">
-                Submit
-            </button>
-            <button @click="resetForm('peerForm')">
-                Reset
-            </button>
-        </form>
-
-
-        <form
-                ref="transactionForm"
-                :model="transactionForm"
-        >
-            <input
-                    size="sm" type="text"
-                    v-model="transactionForm.from"
-                    placeholder="from">
-            <input
-                    size="sm" type="text"
-                    v-model="transactionForm.to"
-                    placeholder="to">
-            <input
-                    size="sm" type="text"
-                    v-model="transactionForm.amount"
-                    placeholder="amount">
-
-            <button :disabled="isMining" type="primary" @click.prevent="submitForm('transactionForm')">
-                Submit
-            </button>
-            <button @click="resetForm('transactionForm')">
-                Reset
-            </button>
-        </form>
-
-
+        </div>
     </div>
 </template>
 
@@ -78,6 +94,10 @@
                 node: {},
                 isMining: false,
                 isConnect: false,
+                isOffer: false,
+                offer: {},
+                isAnswer: false,
+                answer: {},
                 transactionForm: {
                     from: "",
                     to: "",
@@ -107,7 +127,16 @@
                 console.log('peer error', err)  // eslint-disable-line no-console
             },
             onPeerSignal(data) {
-                console.log('SIGNAL', JSON.stringify(data))  // eslint-disable-line no-console
+                let signal = JSON.stringify(data)
+                if (data.type === 'offer') {
+                    this.isOffer = true
+                    this.offer = signal
+                }
+                if (data.type === 'answer') {
+                    this.isAnswer = true
+                    this.answer = signal
+                }
+                console.log('SIGNAL', signal)  // eslint-disable-line no-console
             },
             onPeerConnect() {
                 this.isConnect = true
@@ -194,18 +223,27 @@
 </script>
 
 <style scoped>
-    .connect{
+    .connect {
         display: block;
-        width:100%;
+        width: 100%;
         height: auto;
-        text-align: right;
-
     }
-    .connect--true{
+
+    .connect-indicator {
+        text-align: right;
+    }
+
+    .connect-indicator-true {
         color: green;
     }
-    .connect--false{
+
+    .connect-indicator-false {
         color: red;
+    }
+
+    textarea {
+        width: 100%;
+        font-size: 10px;
     }
 
 
