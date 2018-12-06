@@ -8,7 +8,8 @@
             <div class="connect--false " v-else>
                 <h2>WebRTC Connect Section</h2>
                 <h3><a href="/hw3" target="_blank" >Click here</a>
-                    <!--<router-link class="nav-link" to="/hw3" target="_blank">Click here</router-link>-->
+                    <router-link class="nav-link" to="/hw3" target="_blank">Click here</router-link>
+                    <router-view />
                     To open new tab in browser and create WebRTC connection  </h3>
                 <hr>
                 <div class="connect-indicator connect-indicator-false">
